@@ -68,7 +68,8 @@ namespace InsideAirBnb
             {
                 endpoints.MapMiniProfilerIncludes(new RenderOptions
                 {
-                    StartHidden = false
+                    StartHidden = true,
+                    PopupToggleKeyboardShortcut = "Ctrl+m",
                 });
                 endpoints.MapControllerRoute(
                     name: "default",
