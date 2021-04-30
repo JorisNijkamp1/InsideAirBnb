@@ -60,8 +60,8 @@ namespace InsideAirBnb
         public string SmartLocation { get; set; }
         public string CountryCode { get; set; }
         public string Country { get; set; }
-        public double? Latitude { get; set; }
-        public double? Longitude { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
         public string IsLocationExact { get; set; }
         public string PropertyType { get; set; }
         public string RoomType { get; set; }

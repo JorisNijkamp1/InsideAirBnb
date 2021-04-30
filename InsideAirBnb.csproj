@@ -10,8 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="GeoJSON.Net" Version="1.2.22-rc" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.0-preview.3.21201.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0-preview.3.21201.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.0-preview.3.21201.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0-preview.3.21201.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="2.0.0-preview1-final" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0-preview.3.21201.2">
@@ -21,6 +23,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.0-preview.3.21209.2" />
     <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.2.33" />
     <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.2.33" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
