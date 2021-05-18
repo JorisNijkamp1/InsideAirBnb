@@ -4,10 +4,11 @@ import CustomPopup from "./mapcomponents/CustomPopup";
 import {Button, Col, Row} from 'reactstrap';
 import Geocoder from "react-mapbox-gl-geocoder";
 import ReactMapGL, {Layer, Marker, Source} from 'react-map-gl';
-
 import GeoData from '../GeoTestData/airbnblocations.json';
+import {GetLocationsAction} from "../actions/MapActions";
+import {connect} from "react-redux";
 
-const MapView = () => {
+const MapViewComponent = (props) => {
     const [viewport, setViewport] = useState({latitude: 52.370216, longitude: 4.895168, zoom: 12});
     const [tempMarker, setTempMarker] = useState({name: null, longitude: 1, latitude: 1});
     const [selectedMarker, setSelectedMarker] = useState(null);
@@ -16,6 +17,7 @@ const MapView = () => {
     const mapboxApiKey = 'pk.eyJ1Ijoiam5pamthbXAiLCJhIjoiY2tuc3FvcHM3MmZtNTJvcHJlaTFlczM4ZCJ9.8rfK7ZmuQEY25i1c10c3eg';
 
     useEffect(() => {
+        props.getLocations();
         setViewport({
             latitude: viewport.latitude,
             longitude: viewport.longitude,
@@ -171,4 +173,16 @@ const MapView = () => {
     );
 }
 
-export default MapView;
+const mapStateToProps = state => {
+    return {
+        locations: state.mapReducer.locations
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        getLocations: () => dispatch(GetLocationsAction())
+    }
+}
+
+export const MapView = connect(mapStateToProps, mapDispatchToProps)(MapViewComponent);
