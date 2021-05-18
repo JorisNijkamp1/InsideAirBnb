@@ -10,7 +10,7 @@ using InsideAirBnb.Repositories;
 
 namespace InsideAirBnb.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class ListingsController : ControllerBase
     {

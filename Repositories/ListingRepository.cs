@@ -11,22 +11,24 @@ using Newtonsoft.Json;
 
 namespace InsideAirBnb.Repositories
 {
-    public class ListingRepository : Repository<Listing>, IListingsRepository
+    public class ListingRepository : IListingsRepository
     {
-        public AirBNBContext Context
+        private readonly AirBNBContext _context;
+
+        public ListingRepository(AirBNBContext context)
         {
-            get { return _context as AirBNBContext; }
+            _context = context;
         }
-        
-        public ListingRepository(AirBNBContext context) : base(context){}
+       
 
         public async Task<string> GetLocations()
         {
-            var locationsList = await Context.Listings.Select(location => new Locations
+            var locationsList = await _context.Listings.Select(location => new Locations
                 {Id = location.Id, Latitude = location.Latitude, Longitude = location.Longitude}).ToListAsync();
             var json = ConvertToGeoJson(locationsList);
             return json;
         }
+       
 
         private static string ConvertToGeoJson(List<Locations> loc)
         {

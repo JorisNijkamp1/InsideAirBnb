@@ -9,9 +9,10 @@ export class FetchData extends Component {
     }
 
     componentDidMount() {
-        fetch('https://localhost:5001/api/Listings')
+        fetch('https://localhost:5001/api/locations')
             .then(res => res.json())
             .then(result => {
+                console.log(result)
                 this.setState({
                     neighbourhoods: result,
                     loading: false
