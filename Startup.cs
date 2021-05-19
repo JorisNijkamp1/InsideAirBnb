@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using StackExchange.Profiling;
 
 namespace InsideAirBnb
@@ -26,6 +27,17 @@ namespace InsideAirBnb
         {
 
             services.AddControllersWithViews();
+            
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", options =>
+                {
+                    options.Authority = "https://localhost:5002";
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false
+                    };
+                });
 
             services.AddDbContext<AirBNBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AIRBNB")));
@@ -66,6 +78,9 @@ namespace InsideAirBnb
             app.UseRouting();
 
             app.UseMiniProfiler();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
