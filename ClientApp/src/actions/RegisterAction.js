@@ -1,6 +1,5 @@
 ﻿export function RegisterAction(username, password, passwordRepeat) {
     return async (dispatch) => {
-        console.log(username)
         if (username.length < 5 || username === '') {
             dispatch(registerErrorAction('Gebruikersnaam incorrect!'))
         } else if (password === '' || password.length < 5) {
@@ -11,17 +10,14 @@
             dispatch(registerErrorAction('Wachtwoorden komen niet overeen'))
         } else {
             dispatch(registerErrorAction(''))
-            console.log('Alle data is goed!!!!!!!')
+            const response = await fetch('https://localhost:5001/api/register', {
+                methode: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+            const result = response.json();
+            console.log(result);
         }
-        // return await fetch('https://localhost:5001/api/locations')
-        //     .then((res) => {
-        //         return res.json();
-        //     })
-        //     .then((res) => {
-        //         dispatch(handleRegisterAction(res));
-        //     }).catch(err => {
-        //         console.log(err)
-        //     })
     }
 }
 
