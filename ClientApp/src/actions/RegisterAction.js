@@ -4,7 +4,7 @@
         if (username.length < 5 || username === '') {
             dispatch(registerErrorAction('Gebruikersnaam incorrect!'))
         } else if (password === '' || password.length < 5) {
-            dispatch(registerErrorAction('Vul een correct wachtwoord in'))
+            dispatch(registerErrorAction('Wachtwoord niet geldig'))
         } else if (passwordRepeat === '' || passwordRepeat.length < 5) {
             dispatch(registerErrorAction('Vul een herhaling van uw wachtwoord in'))
         } else if (password !== passwordRepeat) {
