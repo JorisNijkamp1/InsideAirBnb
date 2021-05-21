@@ -1,8 +1,8 @@
 ﻿import * as Redux from 'redux';
 import {MapReducer} from "./MapReducer";
-import {RegisterReducer} from "./RegisterReducer";
+import {LoginReducer} from "./LoginReducer";
 
 export const mainReducer = Redux.combineReducers({
     mapReducer: MapReducer,
-    registerReducer: RegisterReducer
+    loginReducer: LoginReducer
 });

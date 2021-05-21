@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import './NavMenu.css';
+import {authContext} from "../AzureADConfig";
 
 export class NavMenu extends Component {
     static displayName = NavMenu.name;
@@ -20,7 +21,7 @@ export class NavMenu extends Component {
             collapsed: !this.state.collapsed
         });
     }
-
+    
     render() {
         return (
             <header>
@@ -34,17 +35,18 @@ export class NavMenu extends Component {
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
                                 </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/login">Login</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/register">Registreren</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
-                                </NavItem>
+                                {authContext.getCachedUser() === null ?
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/login">Login</NavLink>
+                                    </NavItem>
+                                    : <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/logout">Uitloggen</NavLink>
+                                    </NavItem>}
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/map">MapBox</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <p className='text-dark'>{authContext.getCachedUser()?.userName ? authContext.getCachedUser().userName : null}</p>
                                 </NavItem>
                             </ul>
                         </Collapse>

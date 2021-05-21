@@ -23,6 +23,7 @@ namespace InsideAirBnb
         public virtual DbSet<Review> Reviews { get; set; }
         public virtual DbSet<SummaryListing> SummaryListings { get; set; }
         public virtual DbSet<SummaryReview> SummaryReviews { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -390,6 +391,36 @@ namespace InsideAirBnb
                 entity.Property(e => e.Date).HasColumnName("date");
 
                 entity.Property(e => e.ListingId).HasColumnName("listing_id");
+            });
+            
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasKey(e => e.UserId)
+                    .HasName("PK__users__CB9A1CFFB4CA1856");
+                
+                entity.ToTable("users");
+
+                entity.Property(e => e.UserId)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("userId");
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false)
+                    .HasColumnName("password");
+
+                entity.Property(e => e.Role)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("role");
+
+                entity.Property(e => e.Username)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false)
+                    .HasColumnName("username");
             });
 
             OnModelCreatingPartial(modelBuilder);

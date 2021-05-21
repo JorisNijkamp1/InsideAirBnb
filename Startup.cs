@@ -2,6 +2,7 @@ using AirBNB_React_App;
 using InsideAirBnb.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
@@ -22,30 +23,14 @@ namespace InsideAirBnb
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllersWithViews();
             
-            services.AddAuthentication("Bearer")
-                .AddJwtBearer("Bearer", options =>
-                {
-                    options.Authority = "https://localhost:5002";
-
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateAudience = false
-                    };
-                });
-
             services.AddDbContext<AirBNBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AIRBNB")));
 
-            services.AddMiniProfiler(options =>
-            {
-
-            });
+            services.AddMiniProfiler();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -54,6 +39,7 @@ namespace InsideAirBnb
             });
 
             services.AddScoped<IListingsRepository, ListingRepository>();
+            services.AddScoped<IRegisterRepository, RegisterRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,6 +55,16 @@ namespace InsideAirBnb
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            
+            app.UseAuthentication();
+            
+            app.UseCors(builder => builder.WithOrigins("https://localhost:5001").AllowAnyHeader().AllowAnyMethod().AllowCredentials()
+            );
+            
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Lax
+            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -84,6 +80,7 @@ namespace InsideAirBnb
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapMiniProfilerIncludes(new RenderOptions
                 {
                     StartHidden = true,

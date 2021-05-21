@@ -3,15 +3,15 @@ import {connect} from "react-redux";
 import {Container} from "reactstrap";
 import {authContext} from "../AzureADConfig";
 
-const LoginComponent = (props) => {
+const LogoutComponent = (props) => {
     return (
         <Container>
-            <h3>Login</h3>
+            <h3>Logout</h3>
             <button
                 className="btn btn-primary btn-block"
-                onClick={() => authContext.login()}
+                onClick={() => authContext.logOut()}
             >
-                Inloggen
+                Uitloggen
             </button>
         </Container>
     );
@@ -25,4 +25,4 @@ const mapDispatchToProps = dispatch => {
     return {}
 }
 
-export const Login = connect(mapStateToProps, mapDispatchToProps)(LoginComponent);
+export const Logout = connect(mapStateToProps, mapDispatchToProps)(LogoutComponent);
