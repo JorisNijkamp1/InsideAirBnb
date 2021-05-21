@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import MapView from "../components/MapView";
+import {MapView} from "../components/MapView";
 
 const Map = () => {
     return (

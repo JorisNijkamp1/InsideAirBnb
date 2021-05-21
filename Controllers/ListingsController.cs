@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using InsideAirBnb.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Web.Resource;
 
 namespace InsideAirBnb.Controllers
 {
+    [Authorize]
     [Route("api")]
     [ApiController]
     public class ListingsController : ControllerBase
@@ -16,9 +18,9 @@ namespace InsideAirBnb.Controllers
         {
             _listingsRepository = listingsRepository;
         }
-
+        
         [HttpGet("locations")]
-        [Authorize]
+        [Authorize(Roles = "AdminUser")]
         public async Task<string> GetLocations()
         {
             var locations = await _listingsRepository.GetLocations();

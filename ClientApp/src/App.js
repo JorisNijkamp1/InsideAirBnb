@@ -6,13 +6,13 @@ import {MapView} from "./components/MapView";
 import {Login} from "./components/Login";
 import {SigninOIDC} from "./pages/signin-oidc";
 import {Home} from "./components/Home";
-import {authContext} from "./AzureADConfig";
+import {authContext, getToken} from "./AzureADConfig";
 import {Logout} from "./components/Logout";
 
 export const App = () => {
 
     console.log(authContext.getCachedUser());
-    
+    console.log(getToken())
     return (
         <Layout>
             <Route exact path='/' component={Home}/>
