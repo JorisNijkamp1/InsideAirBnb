@@ -18,6 +18,7 @@ const MapViewComponent = (props) => {
 
     useEffect(() => {
         props.getLocations();
+
         setViewport({
             latitude: viewport.latitude,
             longitude: viewport.longitude,
@@ -59,7 +60,7 @@ const MapViewComponent = (props) => {
     return (
         <>
             <Row className="pl-4">
-                <Col>
+                <Col xs={12}>
                     <h2>
                         Map of Amsterdam!
                     </h2>
@@ -71,7 +72,7 @@ const MapViewComponent = (props) => {
                               mapboxApiAccessToken={mapboxApiKey}
                               onSelected={onSelected}
                               hideOnSelect={true}
-                              value=""
+                              value=''
                               queryParams={params}
                     />
                 </Col>
@@ -91,7 +92,7 @@ const MapViewComponent = (props) => {
                         <Source
                             id="Source-data"
                             type="geojson"
-                            data={GeoData}
+                            data={props.locations}
                             cluster={true}
                             clusterMaxZoom={15}
                             clusterRadius={50}

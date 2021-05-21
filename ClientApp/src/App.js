@@ -12,7 +12,6 @@ import {Logout} from "./components/Logout";
 export const App = () => {
 
     console.log(authContext.getCachedUser());
-    console.log(getToken())
     return (
         <Layout>
             <Route exact path='/' component={Home}/>
