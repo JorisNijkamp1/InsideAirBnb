@@ -22,7 +22,7 @@ namespace InsideAirBnb.Repositories
 
         public async Task<string> GetLocations()
         {
-            var locationsList = await _context.Listings.Select(location => new Locations
+            var locationsList = await _context.Listings.AsNoTracking().Select(location => new Locations
                 {Id = location.Id, Latitude = location.Latitude, Longitude = location.Longitude}).ToListAsync();
             var json = ConvertToGeoJson(locationsList);
             return json;

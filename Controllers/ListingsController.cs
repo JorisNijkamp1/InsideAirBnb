@@ -6,7 +6,7 @@ using Microsoft.Identity.Web.Resource;
 
 namespace InsideAirBnb.Controllers
 {
-    [Authorize]
+    // [Authorize]
     [Route("api")]
     [ApiController]
     public class ListingsController : ControllerBase
@@ -20,7 +20,7 @@ namespace InsideAirBnb.Controllers
         }
         
         [HttpGet("locations")]
-        [Authorize(Roles = "AdminUser")]
+        // [Authorize(Roles = "AdminUser")]
         public async Task<string> GetLocations()
         {
             var locations = await _listingsRepository.GetLocations();
