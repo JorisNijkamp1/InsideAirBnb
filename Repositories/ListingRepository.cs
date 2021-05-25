@@ -22,7 +22,7 @@ namespace InsideAirBnb.Repositories
 
         public string GetLocations()
         {
-            var locationsList = _context.Listings.AsNoTracking().Select(location => new Locations
+            var locationsList = _context.Listings.Select(location => new Locations
                 {Id = location.Id, Latitude = location.Latitude, Longitude = location.Longitude}).ToList();
             var json = ConvertToGeoJson(locationsList);
             return json;
