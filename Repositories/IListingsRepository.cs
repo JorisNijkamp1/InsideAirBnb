@@ -4,6 +4,6 @@ namespace InsideAirBnb.Repositories
 {
     public interface IListingsRepository
     {
-        Task<string> GetLocations();
+        string GetLocations();
     }
 }
