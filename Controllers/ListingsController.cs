@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using InsideAirBnb.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -27,25 +28,18 @@ namespace InsideAirBnb.Controllers
             return locations;
         }
         
+        [HttpGet("location/{id}")]
+        public async Task<IEnumerable<LocationDetails>> GetLocationDetail(int id)
+        {
+            var location = await _listingsRepository.GetLocationDetail(id);
+            return location;
+        }
+        
         // GET: api/Listings
         // [HttpGet]
         // public async Task<ActionResult<IEnumerable<Listing>>> GetListings()
         // {
         //     return await _context.Listings.ToListAsync();
-        // }
-
-        // GET: api/Listings/5
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult<Listing>> GetListing(int id)
-        // {
-        //     var listing = await _context.Listings.FindAsync(id);
-        //
-        //     if (listing == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     return listing;
         // }
 
         // PUT: api/Listings/5

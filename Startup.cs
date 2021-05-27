@@ -75,9 +75,6 @@ namespace InsideAirBnb
             
             app.UseCors("CorsPolicy");
             
-            // app.UseCors(builder => builder.WithOrigins("https://localhost:5001").AllowAnyHeader().AllowAnyMethod()
-            //     .AllowCredentials());
-
             app.UseCookiePolicy(new CookiePolicyOptions
             {
                 MinimumSameSitePolicy = SameSiteMode.Lax

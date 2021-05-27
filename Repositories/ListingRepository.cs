@@ -27,7 +27,17 @@ namespace InsideAirBnb.Repositories
             var json = ConvertToGeoJson(locationsList);
             return json;
         }
-       
+
+        public async Task<IEnumerable<LocationDetails>> GetLocationDetail(int id)
+        {
+            return await _context.Listings.Where(listing => id == listing.Id)
+                .Select(i => new LocationDetails
+                {
+                    Name = i.Name,
+                    Neighborhood = i.Neighbourhood,
+                    Price = i.Price
+                }).ToListAsync();
+        }
 
         private static string ConvertToGeoJson(List<Locations> loc)
         {
@@ -39,11 +49,12 @@ namespace InsideAirBnb.Repositories
                 var geom = new Point(new Position(item.Latitude, item.Longitude));
                 var props = new Dictionary<string, object>
                 {
-                    { "id", item.Id }
+                    {"id", item.Id}
                 };
                 var feature = new Feature(geom, props);
                 model.Features.Add(feature);
             }
+
             var json = JsonConvert.SerializeObject(model);
             return json;
         }

@@ -2,10 +2,8 @@
 import CustomMarker from "./mapcomponents/CustomMarker";
 import CustomPopup from "./mapcomponents/CustomPopup";
 import {Button, Col, Row} from 'reactstrap';
-import Geocoder from "react-mapbox-gl-geocoder";
 import ReactMapGL, {Layer, Marker, Source} from 'react-map-gl';
-import GeoData from '../GeoTestData/airbnblocations.json';
-import {GetLocationsAction} from "../actions/MapActions";
+import {GetLocationDetailAction, GetLocationsAction} from "../actions/MapActions";
 import {connect} from "react-redux";
 
 const MapViewComponent = (props) => {
@@ -57,6 +55,14 @@ const MapViewComponent = (props) => {
     const openPopup = (index) => setSelectedMarker(index);
     const closePopup = () => setSelectedMarker(null);
 
+    const openListing = (event) => {
+        const listing = event.features.find(i => i.layer.id === 'unclustered-point');
+        if (listing !== undefined) {
+            console.log(listing.properties.id)
+            props.getLocationDetails(listing.properties.id);
+        }
+    }
+
     return (
         <>
             <Row className="pl-4">
@@ -68,13 +74,13 @@ const MapViewComponent = (props) => {
             </Row>
             <Row className="pl-4">
                 <Col xs={2}>
-                    <Geocoder viewport={viewport}
-                              mapboxApiAccessToken={mapboxApiKey}
-                              onSelected={onSelected}
-                              hideOnSelect={true}
-                              value=''
-                              queryParams={params}
-                    />
+                    {/*<Geocoder viewport={viewport}*/}
+                    {/*          mapboxApiAccessToken={mapboxApiKey}*/}
+                    {/*          onSelected={onSelected}*/}
+                    {/*          hideOnSelect={true}*/}
+                    {/*          value=''*/}
+                    {/*          queryParams={params}*/}
+                    {/*/>*/}
                 </Col>
                 <Col>
                     <Button color="primary" onClick={() => addMarker()}>Add</Button>
@@ -87,6 +93,7 @@ const MapViewComponent = (props) => {
                         mapStyle="mapbox://styles/mapbox/streets-v11"
                         {...viewport}
                         {...mapStyle}
+                        onClick={openListing}
                         onViewportChange={(viewport) => setViewport(viewport)}>
 
                         <Source
@@ -176,13 +183,15 @@ const MapViewComponent = (props) => {
 
 const mapStateToProps = state => {
     return {
-        locations: state.mapReducer.locations
+        locations: state.mapReducer.locations,
+        selectedLocation: state.mapReducer.selectedLocation
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        getLocations: () => dispatch(GetLocationsAction())
+        getLocations: () => dispatch(GetLocationsAction()),
+        getLocationDetails: (id) => dispatch(GetLocationDetailAction(id))
     }
 }
 
