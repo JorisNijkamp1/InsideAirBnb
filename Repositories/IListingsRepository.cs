@@ -6,6 +6,7 @@ namespace InsideAirBnb.Repositories
     public interface IListingsRepository
     {
         Task<string> GetLocations();
-        Task<IEnumerable<LocationDetails>> GetLocationDetail(int id);
+        Task<LocationDetails> GetLocationDetail(int id);
+        Task<string> GetLocationFilter(double priceFilter);
     }
 }

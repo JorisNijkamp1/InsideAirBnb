@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Diagnostics;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using InsideAirBnb.Repositories;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Identity.Web.Resource;
 
 namespace InsideAirBnb.Controllers
 {
@@ -29,10 +30,17 @@ namespace InsideAirBnb.Controllers
         }
         
         [HttpGet("location/{id}")]
-        public async Task<IEnumerable<LocationDetails>> GetLocationDetail(int id)
+        public async Task<LocationDetails> GetLocationDetail(int id)
         {
             var location = await _listingsRepository.GetLocationDetail(id);
             return location;
+        }
+
+        [HttpPost("locations/filter/price")]
+        public async Task<string> GetLocationFilter([FromBody] PriceFilter filter)
+        {
+            var locations = await _listingsRepository.GetLocationFilter(filter.price);
+            return locations;
         }
         
         // GET: api/Listings

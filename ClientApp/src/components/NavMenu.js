@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink} from 'reactstrap';
+import {Collapse, Container, Navbar, NavbarBrand, NavbarText, NavbarToggler, NavItem, NavLink} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import './NavMenu.css';
 import {authContext} from "../AzureADConfig";
@@ -21,11 +21,11 @@ export class NavMenu extends Component {
             collapsed: !this.state.collapsed
         });
     }
-    
+
     render() {
         return (
             <header>
-                <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
+                <Navbar className="navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow bg-dark text-white">
                     <Container>
                         <NavbarBrand tag={Link} to="/">InsideAirBnb</NavbarBrand>
                         <NavbarToggler onClick={this.toggleNavbar} className="mr-2"/>
@@ -33,20 +33,24 @@ export class NavMenu extends Component {
                                   navbar>
                             <ul className="navbar-nav flex-grow">
                                 <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
+                                    <NavLink tag={Link} className="text-white" to="/">Home</NavLink>
                                 </NavItem>
                                 {authContext.getCachedUser() === null ?
                                     <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/login">Login</NavLink>
+                                        <NavLink tag={Link} className="text-white" to="/login">Login</NavLink>
                                     </NavItem>
                                     : <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/logout">Uitloggen</NavLink>
+                                        <NavLink tag={Link} className="text-white-dark" to="/logout">Uitloggen</NavLink>
                                     </NavItem>}
                                 <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/map">MapBox</NavLink>
+                                    <NavLink tag={Link} className="text-white" to="/map">MapBox</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <p className='text-dark'>{authContext.getCachedUser()?.userName ? authContext.getCachedUser().userName : null}</p>
+                                    {authContext.getCachedUser() !== null ?
+                                        <NavbarText className='pl-5'>Ingelogd
+                                            als: <strong>{authContext.getCachedUser().userName}</strong></NavbarText>
+                                        : null}
+                                    {/*<p className='text-dark d-block' style={{padding: "0.5rem 1rem"}}>{authContext.getCachedUser()?.userName ? authContext.getCachedUser().userName : null}</p>*/}
                                 </NavItem>
                             </ul>
                         </Collapse>

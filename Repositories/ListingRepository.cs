@@ -28,7 +28,7 @@ namespace InsideAirBnb.Repositories
             return json;
         }
 
-        public async Task<IEnumerable<LocationDetails>> GetLocationDetail(int id)
+        public async Task<LocationDetails> GetLocationDetail(int id)
         {
             return await _context.Listings.Where(listing => id == listing.Id)
                 .Select(i => new LocationDetails
@@ -36,7 +36,20 @@ namespace InsideAirBnb.Repositories
                     Name = i.Name,
                     Neighborhood = i.Neighbourhood,
                     Price = i.Price
+                }).SingleAsync();
+        }
+
+        public async Task<string> GetLocationFilter(double priceFilter)
+        {
+            var locationsList = await _context.Listings.Where(x => Convert.ToDouble(x.Price.Replace("$", "")) < priceFilter)
+                .Select(location => new Locations
+                {
+                    Id = location.Id,
+                    Latitude = location.Latitude,
+                    Longitude = location.Longitude
                 }).ToListAsync();
+            // var json = ConvertToGeoJson(locationsList);
+            return locationsList.ToString();
         }
 
         private static string ConvertToGeoJson(List<Locations> loc)
