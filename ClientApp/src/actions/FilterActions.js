@@ -47,6 +47,28 @@ export function FilterNeighbourhoodAction(neighbourhoodFilter) {
     }
 }
 
+export function FilterReviewAction(reviewFilter) {
+    return async (dispatch) => {
+        return await fetch('https://localhost:5001/api/locations/filter/review',
+            {
+                method: 'POST',
+                headers: {
+                    authorization: `Bearer ${getToken()}`,
+                    'content-type': 'application/json',
+                },
+                body: JSON.stringify({reviewScoreValue: reviewFilter})
+            })
+            .then((res) => {
+                return res.json();
+            })
+            .then((res) => {
+                dispatch(handleFilter(res));
+            }).catch(err => {
+                console.log(err)
+            })
+    }
+}
+
 function handleFilter(data) {
     return {
         type: 'Filter',

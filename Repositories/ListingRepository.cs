@@ -81,6 +81,19 @@ namespace InsideAirBnb.Repositories
             return json;
         }
 
+        public async Task<string> GetLocationFilterReview(int reviewFilter)
+        {
+            var locationsList = await _context.Listings.Where(x =>  x.ReviewScoresValue == reviewFilter)
+                .Select(location => new Locations
+                {
+                    Id = location.Id,
+                    Latitude = location.Latitude,
+                    Longitude = location.Longitude
+                }).ToListAsync();
+            var json = ConvertToGeoJson(locationsList);
+            return json;
+        }
+
         private static string ConvertToGeoJson(List<Locations> loc)
         {
             var model = new FeatureCollection();

@@ -11,5 +11,6 @@ namespace InsideAirBnb.Repositories
         Task<LocationDetails> GetLocationDetail(int id);
         Task<string> GetLocationFilterPrice(double priceFilter);
         Task<string> GetLocationFilterNeighbourhood(string neighbourhoodFilter);
+        Task<string> GetLocationFilterReview(int neighbourhoodFilter);
     }
 }

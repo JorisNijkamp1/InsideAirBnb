@@ -64,6 +64,21 @@ namespace InsideAirBnb.Controllers
                 return locations;
             }
         }
+        
+        [HttpPost("locations/filter/review")]
+        public async Task<string> GetLocationFilter([FromBody] ReviewFilter filter)
+        {
+            if (filter.reviewScoreValue == 0)
+            {
+                var locations = await _listingsRepository.GetLocations();
+                return locations;
+            }
+            else
+            {
+                var locations = await _listingsRepository.GetLocationFilterReview(filter.reviewScoreValue);
+                return locations;
+            }
+        }
 
         [HttpGet("neighbourhoods")]
         public async Task<ActionResult<IEnumerable<Neighbourhood>>> GetNeighbourhoods()

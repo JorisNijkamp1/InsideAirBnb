@@ -1,7 +1,6 @@
 ﻿import React, {useEffect, useState} from 'react';
 import {connect} from "react-redux";
 import {Button, Form, FormGroup} from "reactstrap";
-import {GetLocationsAction} from "../../actions/MapActions";
 import {FilterPriceAction} from "../../actions/FilterActions";
 
 const PriceFilterComponent = (props) => {
