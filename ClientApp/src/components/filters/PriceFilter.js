@@ -10,9 +10,10 @@ const PriceFilterComponent = (props) => {
     useEffect(() => {
     }, []);
 
-    const addFilter = (e) => {
+    const addFilter = async (e) => {
         e.preventDefault();
-        props.filterPriceAction(priceFilter);
+        await props.filterPriceAction(priceFilter);
+        setPriceFilter('');
     }
 
     return (
@@ -22,6 +23,7 @@ const PriceFilterComponent = (props) => {
                     type="number"
                     placeholder="Filter hier op prijs! (maximale prijs)"
                     className='w-100'
+                    value={priceFilter ? priceFilter : ''}
                     onChange={(e) => setPriceFilter(e.target.value)}/>
             </FormGroup>
             <Button className='w-100 mb-3' variant="primary" type="submit">

@@ -2,7 +2,6 @@
 
 export function FilterPriceAction(priceFilter) {
     return async (dispatch) => {
-        console.log(JSON.stringify({filter: priceFilter}))
         if (priceFilter === "") {
             priceFilter = 0;
         }
@@ -28,7 +27,6 @@ export function FilterPriceAction(priceFilter) {
 
 export function FilterNeighbourhoodAction(neighbourhoodFilter) {
     return async (dispatch) => {
-        console.log(JSON.stringify({filter: neighbourhoodFilter}))
         return await fetch('https://localhost:5001/api/locations/filter/neighbourhood',
             {
                 method: 'POST',

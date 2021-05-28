@@ -26,7 +26,6 @@ const MapViewComponent = (props) => {
     const openListing = (event) => {
         const listing = event.features.find(i => i.layer.id === 'unclustered-point');
         if (listing !== undefined) {
-            console.log(listing.properties.id)
             props.getLocationDetails(listing.properties.id);
         }
     }
@@ -41,56 +40,58 @@ const MapViewComponent = (props) => {
                     {...mapStyle}
                     onClick={openListing}
                     onViewportChange={(viewport) => setViewport(viewport)}>
-                    <Source
-                        id="Source-data"
-                        type="geojson"
-                        data={props.locations}
-                        cluster={true}
-                        clusterMaxZoom={15}
-                        clusterRadius={50}
-                    >
-                        <Layer
-                            type="circle"
-                            id="cluster"
-                            source="source_id"
-                            paint={{
-                                'circle-color': {
-                                    property: 'point_count',
-                                    type: 'interval',
-                                    stops: [[0, '#ec5242'], [100, '#3fb211'], [750, '#FADA5E ']]
-                                },
-                                'circle-radius': {
-                                    property: 'point_count',
-                                    type: 'interval',
-                                    stops: [[0, 10], [90, 20], [650, 30]]
-                                }
-                            }}
-                            filter={['has', 'point_count']}
-                        />
-                        <Layer
-                            id="unclustered-point"
-                            type="circle"
-                            source="source_id"
-                            filter={['!has', 'point_count']}
-                            paint={{
-                                'circle-color': '#1396d9',
-                                'circle-radius': 8,
-                                'circle-stroke-width': 2,
-                                'circle-stroke-color': '#fff'
-                            }}
-                        />
-                        <Layer
-                            id="cluster-count"
-                            type="symbol"
-                            source="source_id"
-                            filter={['has', 'point_count']}
-                            layout={{
-                                'text-field': '{point_count_abbreviated}',
-                                'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                                'text-size': 12
-                            }}
-                        />
-                    </Source>
+                    {props.location && props.locations.features?.length > 0 ? (
+                        <Source
+                            id="Source-data"
+                            type="geojson"
+                            data={props.locations}
+                            cluster={true}
+                            clusterMaxZoom={15}
+                            clusterRadius={50}
+                        >
+                            <Layer
+                                type="circle"
+                                id="cluster"
+                                source="source_id"
+                                paint={{
+                                    'circle-color': {
+                                        property: 'point_count',
+                                        type: 'interval',
+                                        stops: [[0, '#ec5242'], [100, '#3fb211'], [750, '#FADA5E ']]
+                                    },
+                                    'circle-radius': {
+                                        property: 'point_count',
+                                        type: 'interval',
+                                        stops: [[0, 10], [90, 20], [650, 30]]
+                                    }
+                                }}
+                                filter={['has', 'point_count']}
+                            />
+                            <Layer
+                                id="unclustered-point"
+                                type="circle"
+                                source="source_id"
+                                filter={['!has', 'point_count']}
+                                paint={{
+                                    'circle-color': '#1396d9',
+                                    'circle-radius': 8,
+                                    'circle-stroke-width': 2,
+                                    'circle-stroke-color': '#fff'
+                                }}
+                            />
+                            <Layer
+                                id="cluster-count"
+                                type="symbol"
+                                source="source_id"
+                                filter={['has', 'point_count']}
+                                layout={{
+                                    'text-field': '{point_count_abbreviated}',
+                                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                                    'text-size': 12
+                                }}
+                            />
+                        </Source>
+                    ) : null}
                 </ReactMapGL>
             </div>
             <div className='w-25 float-left px-4'>

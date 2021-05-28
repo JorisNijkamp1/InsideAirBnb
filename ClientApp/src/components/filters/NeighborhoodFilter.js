@@ -21,7 +21,6 @@ const NeighborhoodFilterComponent = (props) => {
             })
     }, []);
 
-    console.log(neighbourhoodFilter)
     
     const neighbourhoodsMapper = () => {
         return neighbourhoods.map(n => {
@@ -36,15 +35,18 @@ const NeighborhoodFilterComponent = (props) => {
         })
     }
 
-    const addFilter = (e) => {
+    const addFilter = async (e) => {
         e.preventDefault();
-        props.filterNeighbourhoodAction(neighbourhoodFilter);
+        await props.filterNeighbourhoodAction(neighbourhoodFilter);
+        setNeighbourhoodFilter('');
     }
     
     return (
         <Form onSubmit={(e) => addFilter(e)}>
             <FormGroup>
-                <Input type="select" name="select" id="exampleSelect" onChange={(e) => setNeighbourhoodFilter(e.target.value)}>
+                <Input type="select" name="select" id="exampleSelect"
+                       value={neighbourhoodFilter ? neighbourhoodFilter : ''}
+                       onChange={(e) => setNeighbourhoodFilter(e.target.value)}>
                     <option value="">---------</option>
                     {neighbourhoodsMapper()}
                 </Input>
