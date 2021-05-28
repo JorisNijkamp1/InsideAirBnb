@@ -41,15 +41,20 @@ namespace InsideAirBnb.Repositories
 
         public async Task<string> GetLocationFilter(double priceFilter)
         {
-            var locationsList = await _context.Listings.Where(x => Convert.ToDouble(x.Price.Replace("$", "")) < priceFilter)
+            var locationsList = await _context.Listings.Where(x => 
+                    Convert.ToInt32(
+                        x.Price.Replace("$", "")
+                            .Replace(",", "")
+                            .Replace(".00", "")
+                        ) < priceFilter)
                 .Select(location => new Locations
                 {
                     Id = location.Id,
                     Latitude = location.Latitude,
                     Longitude = location.Longitude
                 }).ToListAsync();
-            // var json = ConvertToGeoJson(locationsList);
-            return locationsList.ToString();
+            var json = ConvertToGeoJson(locationsList);
+            return json;
         }
 
         private static string ConvertToGeoJson(List<Locations> loc)
