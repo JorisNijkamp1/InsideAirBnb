@@ -9,7 +9,7 @@ export function MapReducer(state = initialState, action) {
             return {...state, locations: action.value};
         case 'GetLocationDetail':
             return {...state, selectedLocation: action.value};
-        case 'FilterPrice':
+        case 'Filter':
             return {...state, locations: action.value};
         default:
             return state;

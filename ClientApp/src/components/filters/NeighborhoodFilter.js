@@ -1,15 +1,53 @@
-﻿import React, {useEffect} from 'react';
+﻿import React, {useEffect, useState} from 'react';
 import {connect} from "react-redux";
-import {Button, Form, FormGroup} from "reactstrap";
+import {Button, Form, FormGroup, Input} from "reactstrap";
+import {getToken} from "../../AzureADConfig";
+import {FilterNeighbourhoodAction, FilterPriceAction} from "../../actions/FilterActions";
 
 const NeighborhoodFilterComponent = (props) => {
+    const [neighbourhoods, setNeighbourhoods] = useState([]);
+    const [neighbourhoodFilter, setNeighbourhoodFilter] = useState('');
+
     useEffect(() => {
+        fetch('https://localhost:5001/api/neighbourhoods', {
+            headers: new Headers({
+                'Authorization': 'Bearer ' + getToken(),
+                'content-type': 'application/json'
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                setNeighbourhoods(data)
+            })
     }, []);
 
+    console.log(neighbourhoodFilter)
+    
+    const neighbourhoodsMapper = () => {
+        return neighbourhoods.map(n => {
+            return (
+                <option 
+                    value={n.neighbourhood1}
+                    key={n.neighbourhood1}
+                >
+                    {n.neighbourhood1}
+                </option>
+            )
+        })
+    }
+
+    const addFilter = (e) => {
+        e.preventDefault();
+        props.filterNeighbourhoodAction(neighbourhoodFilter);
+    }
+    
     return (
-        <Form>
+        <Form onSubmit={(e) => addFilter(e)}>
             <FormGroup>
-                <input type="number" placeholder="Filter hier op buurt!" className='w-100'/>
+                <Input type="select" name="select" id="exampleSelect" onChange={(e) => setNeighbourhoodFilter(e.target.value)}>
+                    <option value="">---------</option>
+                    {neighbourhoodsMapper()}
+                </Input>
             </FormGroup>
             <Button className='w-100 mb-3' variant="primary" type="submit">
                 Buurt filter!
@@ -23,7 +61,9 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-    return {}
+    return {
+        filterNeighbourhoodAction: (neighbourhoodFilter) => dispatch(FilterNeighbourhoodAction(neighbourhoodFilter)),
+    }
 }
 
 export const NeighborhoodFilter = connect(mapStateToProps, mapDispatchToProps)(NeighborhoodFilterComponent);

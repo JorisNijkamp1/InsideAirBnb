@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace InsideAirBnb.Repositories
@@ -28,6 +29,16 @@ namespace InsideAirBnb.Repositories
             return json;
         }
 
+        public async Task<List<Neighbourhood>> GetNeighbourhoods()
+        {
+            var neighbourhoods = await Task.Run(() => _context.Listings.Select(n => new Neighbourhood
+            {
+                Neighbourhood1 = n.Neighbourhood
+            }).Where(w => w.Neighbourhood1 != null).Distinct().ToListAsync());
+            return neighbourhoods;
+        }
+
+        
         public async Task<LocationDetails> GetLocationDetail(int id)
         {
             return await _context.Listings.Where(listing => id == listing.Id)
@@ -39,7 +50,7 @@ namespace InsideAirBnb.Repositories
                 }).SingleAsync();
         }
 
-        public async Task<string> GetLocationFilter(double priceFilter)
+        public async Task<string> GetLocationFilterPrice(double priceFilter)
         {
             var locationsList = await _context.Listings.Where(x => 
                     Convert.ToInt32(
@@ -47,6 +58,19 @@ namespace InsideAirBnb.Repositories
                             .Replace(",", "")
                             .Replace(".00", "")
                         ) < priceFilter)
+                .Select(location => new Locations
+                {
+                    Id = location.Id,
+                    Latitude = location.Latitude,
+                    Longitude = location.Longitude
+                }).ToListAsync();
+            var json = ConvertToGeoJson(locationsList);
+            return json;
+        }
+
+        public async Task<string> GetLocationFilterNeighbourhood(string neighbourhoodFilter)
+        {
+            var locationsList = await _context.Listings.Where(x =>  x.Neighbourhood == neighbourhoodFilter)
                 .Select(location => new Locations
                 {
                     Id = location.Id,

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -37,10 +38,37 @@ namespace InsideAirBnb.Controllers
         }
 
         [HttpPost("locations/filter/price")]
-        public async Task<string> GetLocationFilter([FromBody] PriceFilter filter)
+        public async Task<string> GetLocationFilterPrice([FromBody] PriceFilter filter)
         {
-            var locations = await _listingsRepository.GetLocationFilter(filter.price);
-            return locations;
+            if (filter.price == 0)
+            {
+                var locations = await _listingsRepository.GetLocations();
+                return locations;
+            }else{
+                var locations = await _listingsRepository.GetLocationFilterPrice(filter.price);
+                return locations;
+            }
+        }
+        
+        [HttpPost("locations/filter/neighbourhood")]
+        public async Task<string> GetLocationFilter([FromBody] NeighbourhoodFilter filter)
+        {
+            if (filter.neighbourhood == "")
+            {
+                var locations = await _listingsRepository.GetLocations();
+                return locations;
+            }
+            else
+            {
+                var locations = await _listingsRepository.GetLocationFilterNeighbourhood(filter.neighbourhood);
+                return locations;
+            }
+        }
+
+        [HttpGet("neighbourhoods")]
+        public async Task<ActionResult<IEnumerable<Neighbourhood>>> GetNeighbourhoods()
+        {
+            return await _listingsRepository.GetNeighbourhoods();
         }
         
         // GET: api/Listings
