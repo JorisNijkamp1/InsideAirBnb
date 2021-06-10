@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using AirBNB_React_App;
+using InsideAirBnb.Helpers;
 using InsideAirBnb.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 using Microsoft.AspNetCore.CookiePolicy;
+using StackExchange.Redis;
 
 namespace InsideAirBnb
 {
@@ -31,9 +33,8 @@ namespace InsideAirBnb
 
         public void ConfigureServices(IServiceCollection services)
         {
-            
             services.AddResponseCompression();
-            
+
             services.AddControllersWithViews();
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -42,20 +43,20 @@ namespace InsideAirBnb
                 options.Secure = CookieSecurePolicy.Always;
                 options.HttpOnly = HttpOnlyPolicy.Always;
             });
-            
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = "school-projecten.redis.cache.windows.net";
-                options.InstanceName = "school-projecten";
-            });
+
+            // services.AddStackExchangeRedisCache(options =>
+            // {
+            //     options.Configuration = Configuration.GetConnectionString("Redis");
+            //     options.InstanceName = "school-projecten";
+            // });
 
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
                 {
                     builder.AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials();
+                        .AllowAnyHeader()
+                        .AllowCredentials();
                 });
             });
 
@@ -90,13 +91,14 @@ namespace InsideAirBnb
 
             services.AddScoped<IListingsRepository, ListingRepository>();
             services.AddScoped<IRegisterRepository, RegisterRepository>();
+            services.AddTransient<IListingCachingHelper, ListingCachingHelper>();
+            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(Configuration.GetConnectionString("Redis")));
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseResponseCompression();
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -105,9 +107,9 @@ namespace InsideAirBnb
             {
                 app.UseExceptionHandler("/Error");
             }
-            
+
             app.UseHsts();
-           
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

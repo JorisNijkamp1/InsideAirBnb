@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Threading.Tasks;
+using InsideAirBnb.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using InsideAirBnb.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -16,17 +17,26 @@ namespace InsideAirBnb.Controllers
     {
 
         private readonly IListingsRepository _listingsRepository;
+        private readonly IListingCachingHelper _listingCachingHelper;
         
-        public ListingsController(IListingsRepository listingsRepository)
+        public ListingsController(IListingsRepository listingsRepository, IListingCachingHelper listingCachingHelper)
         {
             _listingsRepository = listingsRepository;
+            _listingCachingHelper = listingCachingHelper;
         }
         
         [HttpGet("locations")]
         [Authorize(Roles = "AdminUser")]
         public async Task<string> GetLocations()
         {
+            if (_listingCachingHelper.CacheExists())
+            {
+                var result = _listingCachingHelper.GetCachedLocations();
+                return result;
+            }
             var locations = await _listingsRepository.GetLocations();
+            _listingCachingHelper.SetCachedLocations(locations);
+            
             return locations;
         }
         
