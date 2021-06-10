@@ -13,9 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StackExchange.Profiling;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Net.Http.Headers;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 using Microsoft.AspNetCore.CookiePolicy;
 using StackExchange.Redis;
@@ -43,13 +41,7 @@ namespace InsideAirBnb
                 options.Secure = CookieSecurePolicy.Always;
                 options.HttpOnly = HttpOnlyPolicy.Always;
             });
-
-            // services.AddStackExchangeRedisCache(options =>
-            // {
-            //     options.Configuration = Configuration.GetConnectionString("Redis");
-            //     options.InstanceName = "school-projecten";
-            // });
-
+            
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
