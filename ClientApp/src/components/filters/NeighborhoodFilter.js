@@ -9,7 +9,7 @@ const NeighborhoodFilterComponent = (props) => {
     const [neighbourhoodFilter, setNeighbourhoodFilter] = useState('');
 
     useEffect(() => {
-        fetch('https://localhost:5001/api/neighbourhoods', {
+        fetch('https://localhost:6001/api/neighbourhoods', {
             headers: new Headers({
                 'Authorization': 'Bearer ' + getToken(),
                 'content-type': 'application/json'

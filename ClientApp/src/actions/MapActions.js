@@ -2,7 +2,7 @@
 
 export function GetLocationsAction(){
     return async (dispatch) => {
-        return await fetch('https://localhost:5001/api/locations', 
+        return await fetch('https://localhost:6001/api/locations', 
             {
                 headers: {
                     authorization: `Bearer ${getToken()}`,
@@ -29,7 +29,7 @@ function handleLocationsAction(data){
 
 export function GetLocationDetailAction(id){
     return async (dispatch) => {
-        return await fetch(`https://localhost:5001/api/location/${id}`,
+        return await fetch(`https://localhost:6001/api/location/${id}`,
             {
                 headers: {
                     authorization: `Bearer ${getToken()}`,

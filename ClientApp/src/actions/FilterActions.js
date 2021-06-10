@@ -5,7 +5,7 @@ export function FilterPriceAction(priceFilter) {
         if (priceFilter === "") {
             priceFilter = 0;
         }
-        return await fetch('https://localhost:5001/api/locations/filter/price',
+        return await fetch('https://localhost:6001/api/locations/filter/price',
             {
                 method: 'POST',
                 headers: {
@@ -27,7 +27,7 @@ export function FilterPriceAction(priceFilter) {
 
 export function FilterNeighbourhoodAction(neighbourhoodFilter) {
     return async (dispatch) => {
-        return await fetch('https://localhost:5001/api/locations/filter/neighbourhood',
+        return await fetch('https://localhost:6001/api/locations/filter/neighbourhood',
             {
                 method: 'POST',
                 headers: {
@@ -49,7 +49,7 @@ export function FilterNeighbourhoodAction(neighbourhoodFilter) {
 
 export function FilterReviewAction(reviewFilter) {
     return async (dispatch) => {
-        return await fetch('https://localhost:5001/api/locations/filter/review',
+        return await fetch('https://localhost:6001/api/locations/filter/review',
             {
                 method: 'POST',
                 headers: {

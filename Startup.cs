@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using AirBNB_React_App;
 using InsideAirBnb.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -12,6 +14,9 @@ using StackExchange.Profiling;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
+using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
+using Microsoft.AspNetCore.CookiePolicy;
 
 namespace InsideAirBnb
 {
@@ -26,32 +31,59 @@ namespace InsideAirBnb
 
         public void ConfigureServices(IServiceCollection services)
         {
+            
+            services.AddResponseCompression();
+            
             services.AddControllersWithViews();
 
-            services.AddAuthentication(options =>
+            services.Configure<CookiePolicyOptions>(options =>
             {
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
-            {
-                // TODO: the tenant id (authority) and client id (audience) 
-                // should normally be pulled from the config file or ENV vars.
-                // this code uses an inline example for brevity.
-                // TODO moet met gecommende regel gebeuren
-                //         options.Authority = Configuration.GetValue<string>("AzureAd:Instance") +
-                options.Authority = "https://login.microsoftonline.com/148557d6-6224-4786-a040-c97e6c391f34";
-                options.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    // TODO moet met gecommende regel gebeuren
-                    // options.Audience = Configuration.GetValue<string>("AzureAd:Audience");
-                    ValidAudience = "5307daf7-fec8-4a85-9f63-d2ef7b0dc118"
-                };
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+                options.Secure = CookieSecurePolicy.Always;
+                options.HttpOnly = HttpOnlyPolicy.Always;
             });
             
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = "school-projecten.redis.cache.windows.net";
+                options.InstanceName = "school-projecten";
+            });
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+                });
+            });
+
+            services.AddAuthentication(options => { options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
+                .AddJwtBearer(options =>
+                {
+                    // TODO: the tenant id (authority) and client id (audience) 
+                    // should normally be pulled from the config file or ENV vars.
+                    // this code uses an inline example for brevity.
+                    // TODO moet met gecommende regel gebeuren
+                    //         options.Authority = Configuration.GetValue<string>("AzureAd:Instance") +
+                    options.Authority = "https://login.microsoftonline.com/148557d6-6224-4786-a040-c97e6c391f34";
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        // TODO moet met gecommende regel gebeuren
+                        // options.Audience = Configuration.GetValue<string>("AzureAd:Audience");
+                        ValidAudience = "5307daf7-fec8-4a85-9f63-d2ef7b0dc118"
+                    };
+                });
+
 
             services.AddDbContext<AirBNBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AIRBNB")));
 
-            services.AddMiniProfiler();
+            services.AddMiniProfiler(options =>
+            {
+                options.SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter();
+            });
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build"; });
@@ -63,6 +95,8 @@ namespace InsideAirBnb
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseResponseCompression();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -70,22 +104,20 @@ namespace InsideAirBnb
             else
             {
                 app.UseExceptionHandler("/Error");
-                app.UseHsts();
             }
             
-            app.UseCors("CorsPolicy");
-            
-            app.UseCookiePolicy(new CookiePolicyOptions
-            {
-                MinimumSameSitePolicy = SameSiteMode.Lax
-            });
-
+            app.UseHsts();
+           
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+
+            app.UseCors();
+
+            app.UseCookiePolicy();
 
             app.UseMiniProfiler();
 
@@ -98,7 +130,7 @@ namespace InsideAirBnb
                 endpoints.MapMiniProfilerIncludes(new RenderOptions
                 {
                     StartHidden = true,
-                    PopupToggleKeyboardShortcut = "Ctrl+m",
+                    PopupToggleKeyboardShortcut = "Ctrl+m"
                 });
                 endpoints.MapControllerRoute(
                     name: "default",
