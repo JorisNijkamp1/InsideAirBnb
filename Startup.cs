@@ -83,6 +83,7 @@ namespace InsideAirBnb
 
             services.AddScoped<IListingsRepository, ListingRepository>();
             services.AddScoped<IRegisterRepository, RegisterRepository>();
+            services.AddScoped<IChartsRepository, ChartsRepository>();
             services.AddTransient<IListingCachingHelper, ListingCachingHelper>();
             services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(Configuration.GetConnectionString("Redis")));
         }

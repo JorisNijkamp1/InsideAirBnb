@@ -46,6 +46,9 @@ export class NavMenu extends Component {
                                     <NavLink tag={Link} className="text-white" to="/map">MapBox</NavLink>
                                 </NavItem>
                                 <NavItem>
+                                    <NavLink tag={Link} className="text-white" to="/charts">Dashboard</NavLink>
+                                </NavItem>
+                                <NavItem>
                                     {authContext.getCachedUser() !== null ?
                                         <NavbarText className='pl-5'>Ingelogd
                                             als: <strong>{authContext.getCachedUser().userName}</strong></NavbarText>

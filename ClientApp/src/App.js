@@ -8,6 +8,7 @@ import {SigninOIDC} from "./pages/signin-oidc";
 import {Home} from "./components/Home";
 import {authContext, getToken} from "./AzureADConfig";
 import {Logout} from "./components/Logout";
+import {Charts} from "./components/Charts";
 
 export const App = () => {
 
@@ -19,6 +20,7 @@ export const App = () => {
             <Route path="/login" component={Login}/>
             <Route path="/logout" component={Logout}/>
             <Route path='/map' component={MapView}/>
+            <Route path='/charts' component={Charts}/>
             <Route path='/signin-oidc' component={SigninOIDC}/>
         </Layout>
     );
