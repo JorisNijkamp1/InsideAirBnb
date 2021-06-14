@@ -8,8 +8,11 @@ const NeighborhoodFilterComponent = (props) => {
     const [neighbourhoods, setNeighbourhoods] = useState([]);
     const [neighbourhoodFilter, setNeighbourhoodFilter] = useState('');
 
+    const API_URL = "https://localhost:6001";
+    // const API_URL = "https://school-projecten.azurewebsites.net";
+    
     useEffect(() => {
-        fetch('https://localhost:6001/api/neighbourhoods', {
+        fetch(`${API_URL}/api/neighbourhoods`, {
             headers: new Headers({
                 'Authorization': 'Bearer ' + getToken(),
                 'content-type': 'application/json'

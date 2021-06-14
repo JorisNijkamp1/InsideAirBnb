@@ -1,11 +1,14 @@
 ﻿import {getToken} from "../AzureADConfig";
 
+const API_URL = "https://localhost:6001";
+// const API_URL = "https://school-projecten.azurewebsites.net";
+
 export function FilterPriceAction(priceFilter) {
     return async (dispatch) => {
         if (priceFilter === "") {
             priceFilter = 0;
         }
-        return await fetch('https://localhost:6001/api/locations/filter/price',
+        return await fetch(`${API_URL}/api/locations/filter/price`,
             {
                 method: 'POST',
                 headers: {
@@ -27,7 +30,7 @@ export function FilterPriceAction(priceFilter) {
 
 export function FilterNeighbourhoodAction(neighbourhoodFilter) {
     return async (dispatch) => {
-        return await fetch('https://localhost:6001/api/locations/filter/neighbourhood',
+        return await fetch(`${API_URL}/api/locations/filter/neighbourhood`,
             {
                 method: 'POST',
                 headers: {
@@ -49,7 +52,7 @@ export function FilterNeighbourhoodAction(neighbourhoodFilter) {
 
 export function FilterReviewAction(reviewFilter) {
     return async (dispatch) => {
-        return await fetch('https://localhost:6001/api/locations/filter/review',
+        return await fetch(`${API_URL}/api/locations/filter/review`,
             {
                 method: 'POST',
                 headers: {

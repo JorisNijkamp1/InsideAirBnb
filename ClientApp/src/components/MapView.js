@@ -4,6 +4,11 @@ import {GetLocationDetailAction, GetLocationsAction} from "../actions/MapActions
 import {connect} from "react-redux";
 import {InfoBar} from "./InfoBar";
 
+import mapboxgl from "mapbox-gl"; // This is a dependency of react-map-gl even if you didn't explicitly install it
+
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
+
 const MapViewComponent = (props) => {
     const [viewport, setViewport] = useState({latitude: 52.370216, longitude: 4.895168, zoom: 12});
     const mapboxApiKey = 'pk.eyJ1Ijoiam5pamthbXAiLCJhIjoiY2tuc3FvcHM3MmZtNTJvcHJlaTFlczM4ZCJ9.8rfK7ZmuQEY25i1c10c3eg';

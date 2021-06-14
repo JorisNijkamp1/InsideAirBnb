@@ -1,8 +1,11 @@
 ﻿import {getToken} from "../AzureADConfig";
 
+const API_URL = "https://localhost:6001";
+// const API_URL = "https://school-projecten.azurewebsites.net";
+
 export function GetLocationsAction(){
     return async (dispatch) => {
-        return await fetch('https://localhost:6001/api/locations', 
+        return await fetch(`https://localhost:6001/api/locations`, 
             {
                 headers: {
                     authorization: `Bearer ${getToken()}`,
@@ -29,7 +32,7 @@ function handleLocationsAction(data){
 
 export function GetLocationDetailAction(id){
     return async (dispatch) => {
-        return await fetch(`https://localhost:6001/api/location/${id}`,
+        return await fetch(`${API_URL}/api/location/${id}`,
             {
                 headers: {
                     authorization: `Bearer ${getToken()}`,
