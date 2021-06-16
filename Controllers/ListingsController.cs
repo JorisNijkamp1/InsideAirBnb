@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using InsideAirBnb.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using InsideAirBnb.Repositories;
+using Microsoft.Extensions.Options;
 
 namespace InsideAirBnb.Controllers
 {
@@ -23,13 +24,15 @@ namespace InsideAirBnb.Controllers
         [HttpGet("locations")]
         public async Task<string> GetLocations()
         {
-            if (_listingCachingHelper.CacheExists())
+            var KEY = "listings";
+            
+            if (_listingCachingHelper.CacheExists(KEY))
             {
-                var result = _listingCachingHelper.GetCachedLocations();
+                var result = _listingCachingHelper.GetCachedLocations(KEY);
                 return result;
             }
             var locations = await _listingsRepository.GetLocations();
-            _listingCachingHelper.SetCachedLocations(locations);
+            _listingCachingHelper.SetCachedLocations(locations, KEY);
             
             return locations;
         }
@@ -87,7 +90,16 @@ namespace InsideAirBnb.Controllers
         [HttpGet("neighbourhoods")]
         public async Task<ActionResult<IEnumerable<Neighbourhood>>> GetNeighbourhoods()
         {
-            return await _listingsRepository.GetNeighbourhoods();
+            const string KEY = "neighbourhoods";
+            if (_listingCachingHelper.CacheExists(KEY))
+            {
+                return await _listingCachingHelper.GetCachedNeighbourhoods(KEY);
+            }
+
+            var data = await _listingsRepository.GetNeighbourhoods();
+            _listingCachingHelper.SetCachedNeighbourhoods(data, KEY);
+            
+            return data;
         }
     }
 }

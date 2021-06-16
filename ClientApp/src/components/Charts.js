@@ -37,7 +37,8 @@ const ChartsComponent = (props) => {
     const [averageAvailabilityChart, setAverageAvailabilityChart] = useState([]);
     const [priceChart, setPriceChart] = useState([]);
     const [averageReviewScore, setAverageReviewScore] = useState([]);
-    
+    const [userStatus, setUserstatus] = useState(false);
+
     const API_URL = "https://localhost:6001";
     // const API_URL = "https://school-projecten.azurewebsites.net";
 
@@ -48,7 +49,14 @@ const ChartsComponent = (props) => {
                 'content-type': 'application/json'
             }),
         })
-            .then(response => response.json())
+            .then(response => {
+                if (response.status === 200) {
+                    setUserstatus(true);
+                } else {
+                    setUserstatus(false);
+                }
+                return response.json()
+            })
             .then(data => {
                 setAverageAvailabilityChart(data)
             });
@@ -59,7 +67,14 @@ const ChartsComponent = (props) => {
                 'content-type': 'application/json'
             }),
         })
-            .then(response => response.json())
+            .then(response => {
+                if (response.status === 200) {
+                    setUserstatus(true);
+                } else {
+                    setUserstatus(false);
+                }
+                return response.json()
+            })
             .then(data => {
                 setAverageReviewScore(data)
             });
@@ -70,7 +85,14 @@ const ChartsComponent = (props) => {
                 'content-type': 'application/json'
             }),
         })
-            .then(response => response.json())
+            .then(response => {
+                if (response.status === 200) {
+                    setUserstatus(true);
+                } else {
+                    setUserstatus(false);
+                }
+                return response.json()
+            })
             .then(data => {
                 setPriceChart(data)
             })
@@ -100,7 +122,7 @@ const ChartsComponent = (props) => {
         })
         return result;
     }
-    
+
     const dataAverageAvailability = {
         labels: averageAvailabilityChart.map(e => {
             return e.numbers
@@ -121,7 +143,7 @@ const ChartsComponent = (props) => {
             }
         ]
     };
-    
+
     const dataAverageReviewScore = {
         labels: averageReviewScore.map(e => {
             return e.numbers;
@@ -152,29 +174,32 @@ const ChartsComponent = (props) => {
             }
         ]
     };
-    
+
     return (
         <Container>
-            <div className="h-50 py-4">
-                {averageAvailabilityChart && averageAvailabilityChart.length > 0 ? (
-                    <div className="py-5 h-25">
-                        <h2>Types accomodaties.</h2>
-                        <Doughnut data={dataAverageAvailability} />
+            {userStatus ? (
+                    <div className="h-50 py-4">
+                        {averageAvailabilityChart && averageAvailabilityChart.length > 0 ? (
+                            <div className="py-5 h-25">
+                                <h2>Types accomodaties.</h2>
+                                <Doughnut data={dataAverageAvailability}/>
+                            </div>
+                        ) : null}
+                        {priceChart && priceChart.length > 0 ? (
+                            <div className="py-5">
+                                <h2>Gemiddelde prijs per buurt.</h2>
+                                <Bar data={dataPriceChart} options={optionsAveragePrice} height={500} width={1000}/>
+                            </div>
+                        ) : null}
+                        {averageReviewScore && averageReviewScore.length > 0 ? (
+                            <div className="py-5">
+                                <h2 className="text-center">Gemiddelde review score per buurt</h2>
+                                <Doughnut data={dataAverageReviewScore} height={300} width={1000}/>
+                            </div>
+                        ) : null}
                     </div>
-                ) : null}
-                {priceChart && priceChart.length > 0 ? (
-                    <div className="py-5">
-                        <h2>Gemiddelde prijs per buurt.</h2>
-                        <Bar data={dataPriceChart} options={optionsAveragePrice} height={500} width={1000}/>
-                    </div>
-                ) : null}
-                {averageReviewScore && averageReviewScore.length > 0 ? (
-                    <div className="py-5">
-                        <h2 className="text-center">Gemiddelde review score per buurt</h2>
-                        <Doughnut data={dataAverageReviewScore} height={300} width={1000}/>
-                    </div>
-                ) : null}
-            </div>
+                ) :
+                <h1>Helaas u heeft geen toegang tot het dashboard!</h1>}
         </Container>
     );
 }
