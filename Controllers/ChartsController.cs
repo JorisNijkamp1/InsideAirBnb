@@ -20,23 +20,23 @@ namespace InsideAirBnb.Controllers
         }
 
         [HttpGet("chart/availability")]
-        public async Task<IEnumerable<Chart>> GetAvailabilityInfoChart()
+        public async Task<IEnumerable<ChartAverageNeighbourhood>> GetAverageReviewInfoChart()
         {
-            var data = await _chartsRepository.GetAvailabilityInfoChart();
+            var data = await _chartsRepository.GetAverageReviewInfoChart();
             return data.OrderBy(chart => chart.Numbers);
         }
-        
-        [HttpGet("chart/averagepriceneighbourhood")]
-        public async Task<IEnumerable<ChartAveragePriceNeighbourhood>> GetAveragePriceNeighbourhoodInfoChart()
+
+        [HttpGet("chart/housetypes")]
+        public async Task<IEnumerable<ChartAverageNeighbourhood>> GetAverageAvailabilityNeighbourhoodInfoChart()
         {
-            var data = await _chartsRepository.GetAveragePriceNeighbourhoodInfoChart();
+            var data = await _chartsRepository.GetAccomodationsTypesInfoChart();
             return data;
         }
         
-        [HttpGet("chart/averageavailabilityneighbourhood")]
-        public async Task<IEnumerable<ChartAverageAvailabilityNeighbourhood>> GetAverageAvailabilityNeighbourhoodInfoChart()
+        [HttpGet("chart/averagepriceneighbourhood")]
+        public async Task<IEnumerable<ChartAverageNeighbourhood>> GetAveragePriceNeighbourhoodInfoChart()
         {
-            var data = await _chartsRepository.GetAverageAvailabilityNeighbourhoodInfoChart();
+            var data = await _chartsRepository.GetAveragePriceNeighbourhoodInfoChart();
             return data;
         }
     }

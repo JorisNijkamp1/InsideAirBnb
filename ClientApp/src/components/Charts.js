@@ -1,7 +1,7 @@
 ﻿import React, {useEffect, useState} from 'react';
 import {connect} from "react-redux";
 import {Container} from "reactstrap";
-import {Bar, Line} from 'react-chartjs-2';
+import {Bar, Doughnut, Line} from 'react-chartjs-2';
 import {getToken} from "../AzureADConfig";
 
 
@@ -61,47 +61,16 @@ const optionsAveragePrice = {
     }
 }
 
-const optionsAvailability = {
-    legend: {
-        display: false
-    },
-    tooltips: {
-        enabled: true
-    },
-    elements: {
-        point: {
-            radius: 0}},
-    responsive: true,
-    scales: {
-        yAxes: [
-            {
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Amount of AirBnBs'
-                }
-            }
-        ],
-        xAxes: [
-            {
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Days available(per year)'
-                }
-            }
-        ]
-    }
-}
-
 const ChartsComponent = (props) => {
     const [averageAvailabilityChart, setAverageAvailabilityChart] = useState([]);
     const [priceChart, setPriceChart] = useState([]);
-    const [availabilityChart, setAvailabilityChart] = useState([]);
+    const [averageReviewScore, setAverageReviewScore] = useState([]);
     
     const API_URL = "https://localhost:6001";
     // const API_URL = "https://school-projecten.azurewebsites.net";
 
     useEffect(() => {
-        fetch(`${API_URL}/api/chart/averageavailabilityneighbourhood`, {
+        fetch(`${API_URL}/api/chart/housetypes`, {
             headers: new Headers({
                 'Authorization': 'Bearer ' + getToken(),
                 'content-type': 'application/json'
@@ -120,7 +89,7 @@ const ChartsComponent = (props) => {
         })
             .then(response => response.json())
             .then(data => {
-                setAvailabilityChart(data)
+                setAverageReviewScore(data)
             });
 
         fetch(`${API_URL}/api/chart/averagepriceneighbourhood`, {
@@ -150,12 +119,12 @@ const ChartsComponent = (props) => {
 
     const dataAverageAvailability = {
         labels: averageAvailabilityChart.map(e => {
-            console.log(e.numbers)
             return e.numbers
         }),
         scaleLabel: 'text',
         datasets: [
             {
+                label: '# van gemiddelde beschikbaarheid',
                 data: averageAvailabilityChart.map(e => {
                     return e.count;
                 }),
@@ -164,17 +133,18 @@ const ChartsComponent = (props) => {
             }
         ]
     };
-
-    const dataAvailabilityChart = {
-        labels: availabilityChart.map(e => {
-            return parseInt(e.numbers);
+    
+    const dataAverageReviewScore = {
+        labels: averageReviewScore.map(e => {
+            return e.numbers;
         }),
         datasets: [
             {
-                data: availabilityChart.map(e => {
+                label: '# van gemiddelde prijs',
+                data: averageReviewScore.map(e => {
                     return e.count;
                 }),
-                backgroundColor: dynamicColors(1)
+                backgroundColor: dynamicColors(60)
             }
         ]
     };
@@ -187,6 +157,7 @@ const ChartsComponent = (props) => {
         scaleLabel: 'text',
         datasets: [
             {
+                label: '# van gemiddelde beschikbaarheid',
                 data: priceChart.map(e => {
                     return e.count;
                 }),
@@ -195,28 +166,26 @@ const ChartsComponent = (props) => {
             }
         ]
     };
-
-
+    
     return (
         <Container>
             <div className="h-50 py-4">
                 {averageAvailabilityChart && averageAvailabilityChart.length > 0 ? (
                     <div className="py-5">
-                        <h2>Gemiddelde beschikbaarheid per buurt per 30 dagen.</h2>
+                        <h2>Aantal types accomodaties.</h2>
                         <Bar data={dataAverageAvailability} options={optionsAvergeAvailibility} height={500} width={1000}/>
-                    </div>
-                ) : null}
-                {availabilityChart && availabilityChart.length > 0 ? (
-                    <div className="py-5">
-                        <h2>Beschikbaarheid per maand</h2>
-                        <p>Links is het aantal accomodaties. Onderaan de hoeveelheid vrije dagen per maand.</p>
-                        <Line data={dataAvailabilityChart} options={optionsAvailability} height={300} width={1000}/>
                     </div>
                 ) : null}
                 {priceChart && priceChart.length > 0 ? (
                     <div className="py-5">
                         <h2>Gemiddelde prijs per buurt.</h2>
                         <Bar data={dataPriceChart} options={optionsAveragePrice} height={500} width={1000}/>
+                    </div>
+                ) : null}
+                {averageReviewScore && averageReviewScore.length > 0 ? (
+                    <div className="py-5">
+                        <h2 className="text-center">Gemiddelde review score per buurt</h2>
+                        <Doughnut data={dataAverageReviewScore} height={300} width={1000}/>
                     </div>
                 ) : null}
             </div>

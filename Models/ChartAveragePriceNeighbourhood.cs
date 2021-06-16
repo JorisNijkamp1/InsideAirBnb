@@ -1,6 +1,6 @@
 ﻿namespace InsideAirBnb
 {
-    public class ChartAveragePriceNeighbourhood
+    public class ChartAverageNeighbourhood
     {
         public string? Numbers { get; set; }
         public double? Count { get; set; }

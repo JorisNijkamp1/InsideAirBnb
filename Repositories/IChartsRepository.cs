@@ -5,8 +5,8 @@ namespace InsideAirBnb.Repositories
 {
     public interface IChartsRepository
     {
-        Task<IEnumerable<Chart>> GetAvailabilityInfoChart();
-        Task<IEnumerable<ChartAveragePriceNeighbourhood>> GetAveragePriceNeighbourhoodInfoChart();
-        Task<IEnumerable<ChartAverageAvailabilityNeighbourhood>> GetAverageAvailabilityNeighbourhoodInfoChart();
+        Task<IEnumerable<ChartAverageNeighbourhood>> GetAverageReviewInfoChart();
+        Task<IEnumerable<ChartAverageNeighbourhood>> GetAveragePriceNeighbourhoodInfoChart();
+        Task<IEnumerable<ChartAverageNeighbourhood>> GetAccomodationsTypesInfoChart();
     }
 }
