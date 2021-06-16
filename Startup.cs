@@ -22,12 +22,11 @@ namespace InsideAirBnb
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -41,7 +40,7 @@ namespace InsideAirBnb
                 options.Secure = CookieSecurePolicy.Always;
                 options.HttpOnly = HttpOnlyPolicy.Always;
             });
-            
+
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -55,20 +54,13 @@ namespace InsideAirBnb
             services.AddAuthentication(options => { options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
                 .AddJwtBearer(options =>
                 {
-                    // TODO: the tenant id (authority) and client id (audience) 
-                    // should normally be pulled from the config file or ENV vars.
-                    // this code uses an inline example for brevity.
-                    // TODO moet met gecommende regel gebeuren
-                    //         options.Authority = Configuration.GetValue<string>("AzureAd:Instance") +
-                    options.Authority = "https://login.microsoftonline.com/148557d6-6224-4786-a040-c97e6c391f34";
+                    options.Authority = Configuration.GetValue<string>("AzureAd:Authority");
+
                     options.TokenValidationParameters = new TokenValidationParameters()
                     {
-                        // TODO moet met gecommende regel gebeuren
-                        // options.Audience = Configuration.GetValue<string>("AzureAd:Audience");
-                        ValidAudience = "5307daf7-fec8-4a85-9f63-d2ef7b0dc118"
+                        ValidAudience = Configuration.GetValue<string>("AzureAd:ValidAudience")
                     };
                 });
-
 
             services.AddDbContext<AirBNBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AIRBNB")));
@@ -82,12 +74,12 @@ namespace InsideAirBnb
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build"; });
 
             services.AddScoped<IListingsRepository, ListingRepository>();
-            services.AddScoped<IRegisterRepository, RegisterRepository>();
             services.AddScoped<IChartsRepository, ChartsRepository>();
             services.AddTransient<IListingCachingHelper, ListingCachingHelper>();
-            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(Configuration.GetConnectionString("Redis")));
+            services.AddSingleton<IConnectionMultiplexer>(
+                ConnectionMultiplexer.Connect(Configuration.GetConnectionString("Redis")));
         }
-        
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseResponseCompression();
@@ -98,7 +90,6 @@ namespace InsideAirBnb
             }
             else
             {
-               
                 app.UseExceptionHandler("/Error");
             }
 

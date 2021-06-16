@@ -3,11 +3,9 @@ using System.Threading.Tasks;
 using InsideAirBnb.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using InsideAirBnb.Repositories;
-using Microsoft.AspNetCore.Authorization;
 
 namespace InsideAirBnb.Controllers
 {
-    [Authorize]
     [Route("api")]
     [ApiController]
     public class ListingsController : ControllerBase

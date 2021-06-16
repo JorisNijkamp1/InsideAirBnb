@@ -5,37 +5,9 @@ import {Bar, Doughnut, Line} from 'react-chartjs-2';
 import {getToken} from "../AzureADConfig";
 
 
-const optionsAvergeAvailibility = {
-    legend: {
-        display: false
-    },
-    tooltips: {
-        enabled: true
-    },
-    responsive: true,
-    scales: {
-        yAxes: [
-            {
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Amount of reviews'
-                }
-            }
-        ],
-        xAxes: [
-            {
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Score from 1 to 10'
-                }
-            }
-        ]
-    }
-}
-
 const optionsAveragePrice = {
     legend: {
-        display: false
+        display: true
     },
     tooltips: {
         enabled: true
@@ -117,14 +89,30 @@ const ChartsComponent = (props) => {
         return array;
     };
 
+    const dataForFilter = () => {
+        const result = [];
+        averageAvailabilityChart.map((item, i) => {
+            console.log(item)
+            // result[i].label =  item.numbers
+            // result[i].data =  averageAvailabilityChart.map(e => {
+            //     return e.count;
+            // });
+        })
+        return result;
+    }
+    
     const dataAverageAvailability = {
         labels: averageAvailabilityChart.map(e => {
             return e.numbers
         }),
         scaleLabel: 'text',
+        // datasets: dataForFilter()
         datasets: [
             {
                 label: '# van gemiddelde beschikbaarheid',
+                // label: averageAvailabilityChart.map(e => {
+                //     return e.numbers
+                // }),
                 data: averageAvailabilityChart.map(e => {
                     return e.count;
                 }),
@@ -151,13 +139,11 @@ const ChartsComponent = (props) => {
 
     const dataPriceChart = {
         labels: priceChart.map(e => {
-            console.log(e.numbers)
             return e.numbers
         }),
-        scaleLabel: 'text',
         datasets: [
             {
-                label: '# van gemiddelde beschikbaarheid',
+                label: '# van gemiddelde prijs',
                 data: priceChart.map(e => {
                     return e.count;
                 }),
@@ -171,9 +157,9 @@ const ChartsComponent = (props) => {
         <Container>
             <div className="h-50 py-4">
                 {averageAvailabilityChart && averageAvailabilityChart.length > 0 ? (
-                    <div className="py-5">
-                        <h2>Aantal types accomodaties.</h2>
-                        <Bar data={dataAverageAvailability} options={optionsAvergeAvailibility} height={500} width={1000}/>
+                    <div className="py-5 h-25">
+                        <h2>Types accomodaties.</h2>
+                        <Doughnut data={dataAverageAvailability} />
                     </div>
                 ) : null}
                 {priceChart && priceChart.length > 0 ? (
