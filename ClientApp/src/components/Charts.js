@@ -111,18 +111,6 @@ const ChartsComponent = (props) => {
         return array;
     };
 
-    const dataForFilter = () => {
-        const result = [];
-        averageAvailabilityChart.map((item, i) => {
-            console.log(item)
-            // result[i].label =  item.numbers
-            // result[i].data =  averageAvailabilityChart.map(e => {
-            //     return e.count;
-            // });
-        })
-        return result;
-    }
-
     const dataAverageAvailability = {
         labels: averageAvailabilityChart.map(e => {
             return e.numbers
