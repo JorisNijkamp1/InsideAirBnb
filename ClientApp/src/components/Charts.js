@@ -5,15 +5,14 @@ import {Bar, Line} from 'react-chartjs-2';
 import {getToken} from "../AzureADConfig";
 
 
-const optionsReview = {
+const optionsAvergeAvailibility = {
     legend: {
         display: false
     },
     tooltips: {
         enabled: true
     },
-    maintainAspectRatio: false,
-    responsive: false,
+    responsive: true,
     scales: {
         yAxes: [
             {
@@ -34,6 +33,34 @@ const optionsReview = {
     }
 }
 
+const optionsAveragePrice = {
+    legend: {
+        display: false
+    },
+    tooltips: {
+        enabled: true
+    },
+    responsive: true,
+    scales: {
+        yAxes: [
+            {
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Prijs'
+                }
+            }
+        ],
+        xAxes: [
+            {
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Buurten'
+                }
+            }
+        ]
+    }
+}
+
 const optionsAvailability = {
     legend: {
         display: false
@@ -44,8 +71,7 @@ const optionsAvailability = {
     elements: {
         point: {
             radius: 0}},
-    maintainAspectRatio: false,
-    responsive: false,
+    responsive: true,
     scales: {
         yAxes: [
             {
@@ -67,13 +93,15 @@ const optionsAvailability = {
 }
 
 const ChartsComponent = (props) => {
-    const [reviewChart, setReviewChart] = useState([]);
+    const [averageAvailabilityChart, setAverageAvailabilityChart] = useState([]);
+    const [priceChart, setPriceChart] = useState([]);
     const [availabilityChart, setAvailabilityChart] = useState([]);
+    
     const API_URL = "https://localhost:6001";
     // const API_URL = "https://school-projecten.azurewebsites.net";
 
     useEffect(() => {
-        fetch(`${API_URL}/api/chart/review`, {
+        fetch(`${API_URL}/api/chart/averageavailabilityneighbourhood`, {
             headers: new Headers({
                 'Authorization': 'Bearer ' + getToken(),
                 'content-type': 'application/json'
@@ -81,7 +109,7 @@ const ChartsComponent = (props) => {
         })
             .then(response => response.json())
             .then(data => {
-                setReviewChart(data)
+                setAverageAvailabilityChart(data)
             });
 
         fetch(`${API_URL}/api/chart/availability`, {
@@ -93,7 +121,19 @@ const ChartsComponent = (props) => {
             .then(response => response.json())
             .then(data => {
                 setAvailabilityChart(data)
+            });
+
+        fetch(`${API_URL}/api/chart/averagepriceneighbourhood`, {
+            headers: new Headers({
+                'Authorization': 'Bearer ' + getToken(),
+                'content-type': 'application/json'
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                setPriceChart(data)
             })
+
     }, []);
 
     const dynamicColors = arraylength => {
@@ -108,14 +148,15 @@ const ChartsComponent = (props) => {
         return array;
     };
 
-    const dataReviewChart = {
-        labels: reviewChart.map(e => {
-            return parseInt(e.numbers);
+    const dataAverageAvailability = {
+        labels: averageAvailabilityChart.map(e => {
+            console.log(e.numbers)
+            return e.numbers
         }),
         scaleLabel: 'text',
         datasets: [
             {
-                data: reviewChart.map(e => {
+                data: averageAvailabilityChart.map(e => {
                     return e.count;
                 }),
                 backgroundColor: dynamicColors(20),
@@ -138,14 +179,31 @@ const ChartsComponent = (props) => {
         ]
     };
 
+    const dataPriceChart = {
+        labels: priceChart.map(e => {
+            console.log(e.numbers)
+            return e.numbers
+        }),
+        scaleLabel: 'text',
+        datasets: [
+            {
+                data: priceChart.map(e => {
+                    return e.count;
+                }),
+                backgroundColor: dynamicColors(20),
+                hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+            }
+        ]
+    };
+
+
     return (
         <Container>
-            <h3>Charts</h3>
             <div className="h-50 py-4">
-                {reviewChart && reviewChart.length > 0 ? (
+                {averageAvailabilityChart && averageAvailabilityChart.length > 0 ? (
                     <div className="py-5">
-                        <h2>Gemiddelde reviews</h2>
-                        <Bar data={dataReviewChart} options={optionsReview} height={300} width={1000}/>
+                        <h2>Gemiddelde beschikbaarheid per buurt per 30 dagen.</h2>
+                        <Bar data={dataAverageAvailability} options={optionsAvergeAvailibility} height={500} width={1000}/>
                     </div>
                 ) : null}
                 {availabilityChart && availabilityChart.length > 0 ? (
@@ -153,6 +211,12 @@ const ChartsComponent = (props) => {
                         <h2>Beschikbaarheid per maand</h2>
                         <p>Links is het aantal accomodaties. Onderaan de hoeveelheid vrije dagen per maand.</p>
                         <Line data={dataAvailabilityChart} options={optionsAvailability} height={300} width={1000}/>
+                    </div>
+                ) : null}
+                {priceChart && priceChart.length > 0 ? (
+                    <div className="py-5">
+                        <h2>Gemiddelde prijs per buurt.</h2>
+                        <Bar data={dataPriceChart} options={optionsAveragePrice} height={500} width={1000}/>
                     </div>
                 ) : null}
             </div>

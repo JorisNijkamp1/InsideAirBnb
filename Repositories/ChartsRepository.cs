@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -14,19 +15,6 @@ namespace InsideAirBnb.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Chart>> GetReviewInfoChart()
-        {
-            var charts = await Task.Run(() => _context.Listings
-                .GroupBy(x => x.ReviewScoresRating / 10)
-                .Select(s => new Chart
-                {
-                    Numbers = s.Key,
-                    Count = s.Count()
-                }).ToListAsync());
-            var ratings = charts.Where(x => x.Numbers != null).ToArray();
-            return ratings;
-        }
-        
         public async Task<IEnumerable<Chart>> GetAvailabilityInfoChart()
         {
             var charts = await Task.Run(() => _context.Listings
@@ -41,7 +29,6 @@ namespace InsideAirBnb.Repositories
             return data;
         }
         
-        // TODO fix averageprice
         public async Task<IEnumerable<ChartAveragePriceNeighbourhood>> GetAveragePriceNeighbourhoodInfoChart()
         {
             var charts = await Task.Run(() => _context.Listings
@@ -49,10 +36,16 @@ namespace InsideAirBnb.Repositories
                 .Select(s => new ChartAveragePriceNeighbourhood
                 {
                     Numbers = s.Key,
-                    Count = s.Average(x => x.Availability30)
+                    Count = s.Average(x => Convert.ToDouble(
+                        x.Price.Replace("$", "")
+                            .Replace(",", "")
+                            .Replace(".00", "")
+                    ))
                 }).ToListAsync());
+            
+            var data = charts.Where(x => x.Numbers != null).ToArray();
 
-            return charts;
+            return data;
         }
         
         public async Task<IEnumerable<ChartAverageAvailabilityNeighbourhood>> GetAverageAvailabilityNeighbourhoodInfoChart()
@@ -64,8 +57,10 @@ namespace InsideAirBnb.Repositories
                     Numbers = s.Key,
                     Count = s.Average(x => x.Availability30)
                 }).ToListAsync());
+            
+            var data = charts.Where(x => x.Numbers != null).ToArray();
 
-            return charts;
+            return data;
         }
     }
 }
