@@ -8,5 +8,6 @@ namespace InsideAirBnb.Repositories
         Task<IEnumerable<Chart>> GetReviewInfoChart();
         Task<IEnumerable<Chart>> GetAvailabilityInfoChart();
         Task<IEnumerable<ChartAveragePriceNeighbourhood>> GetAveragePriceNeighbourhoodInfoChart();
+        Task<IEnumerable<ChartAverageAvailabilityNeighbourhood>> GetAverageAvailabilityNeighbourhoodInfoChart();
     }
 }

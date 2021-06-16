@@ -49,10 +49,22 @@ namespace InsideAirBnb.Repositories
                 .Select(s => new ChartAveragePriceNeighbourhood
                 {
                     Numbers = s.Key,
-                    Count = s.Count()
+                    Count = s.Average(x => x.Availability30)
                 }).ToListAsync());
-            
-            
+
+            return charts;
+        }
+        
+        public async Task<IEnumerable<ChartAverageAvailabilityNeighbourhood>> GetAverageAvailabilityNeighbourhoodInfoChart()
+        {
+            var charts = await Task.Run(() => _context.Listings
+                .GroupBy(x => x.Neighbourhood)
+                .Select(s => new ChartAverageAvailabilityNeighbourhood
+                {
+                    Numbers = s.Key,
+                    Count = s.Average(x => x.Availability30)
+                }).ToListAsync());
+
             return charts;
         }
     }

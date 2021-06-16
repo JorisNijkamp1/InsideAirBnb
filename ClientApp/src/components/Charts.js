@@ -41,7 +41,9 @@ const optionsAvailability = {
     tooltips: {
         enabled: true
     },
-    elements: {point: {radius: 0}},
+    elements: {
+        point: {
+            radius: 0}},
     maintainAspectRatio: false,
     responsive: false,
     scales: {
@@ -148,9 +150,8 @@ const ChartsComponent = (props) => {
                 ) : null}
                 {availabilityChart && availabilityChart.length > 0 ? (
                     <div className="py-5">
-                        <h2>Gemiddelde beschikbaarheid per maand</h2>
-                        <p>Links is het aantal accomodaties. </p>
-                        <p>Onderaan de hoeveelheid vrije dagen per maand.</p>
+                        <h2>Beschikbaarheid per maand</h2>
+                        <p>Links is het aantal accomodaties. Onderaan de hoeveelheid vrije dagen per maand.</p>
                         <Line data={dataAvailabilityChart} options={optionsAvailability} height={300} width={1000}/>
                     </div>
                 ) : null}

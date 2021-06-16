@@ -98,6 +98,7 @@ namespace InsideAirBnb
             }
             else
             {
+               
                 app.UseExceptionHandler("/Error");
             }
 

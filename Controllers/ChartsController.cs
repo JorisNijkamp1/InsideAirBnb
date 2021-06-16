@@ -39,5 +39,12 @@ namespace InsideAirBnb.Controllers
             var data = await _chartsRepository.GetAveragePriceNeighbourhoodInfoChart();
             return data;
         }
+        
+        [HttpGet("chart/averageavailabilityneighbourhood")]
+        public async Task<IEnumerable<ChartAverageAvailabilityNeighbourhood>> GetAverageAvailabilityNeighbourhoodInfoChart()
+        {
+            var data = await _chartsRepository.GetAverageAvailabilityNeighbourhoodInfoChart();
+            return data;
+        }
     }
 }
