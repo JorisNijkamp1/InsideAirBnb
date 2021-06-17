@@ -10,13 +10,18 @@ const InfoBarComponent = (props) => {
 
 
     const location = () => {
-        if (props.selectedLocation.name && props.selectedLocation.neighborhood && props.selectedLocation.price) {
+        if (props.selectedLocation.name) {
+            console.log(props.selectedLocation);
+            
             return (
                 <>
                     <h4 className='text-secondary'>Informatie!</h4>
                     <p><strong>Naam:</strong> {props.selectedLocation.name}</p>
                     <p><strong>Buurt:</strong> {props.selectedLocation.neighborhood}</p>
                     <p><strong>Prijs:</strong> {props.selectedLocation.price}</p>
+                    <h4>Statistieken:</h4>
+                    <p>#overnachtingen: {props.selectedLocation.nights} </p>
+                    <p>#opbrengst: € {props.selectedLocation.nights * props.selectedLocation.price} ,- </p>
                 </>
             )
         }

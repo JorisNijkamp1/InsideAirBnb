@@ -5,7 +5,7 @@ const API_URL = "https://localhost:6001";
 
 export function GetLocationsAction(){
     return async (dispatch) => {
-        return await fetch(`https://localhost:6001/api/locations`, 
+        return await fetch(`${API_URL}/api/locations`, 
             {
                 headers: {
                     authorization: `Bearer ${getToken()}`,

@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace InsideAirBnb.Repositories
@@ -38,26 +37,48 @@ namespace InsideAirBnb.Repositories
             return neighbourhoods;
         }
 
-        
+
         public async Task<LocationDetails> GetLocationDetail(int id)
         {
-            return await _context.Listings.Where(listing => id == listing.Id)
+            var nights = await _context.Calendars
+                .Where(i => i.ListingId == id)
+                .GroupBy(x => x.ListingId)
+                .Select(s => new LocationDetails
+                {
+                    Nights = s.Count()
+                }).SingleAsync();
+
+            var locationData = await _context.Listings
+                .Where(listing => id == listing.Id)
                 .Select(i => new LocationDetails
                 {
                     Name = i.Name,
                     Neighborhood = i.Neighbourhood,
-                    Price = i.Price
+                    Price = Convert.ToDouble(
+                        i.Price.Replace("$", "")
+                            .Replace(",", "")
+                            .Replace(".00", "")
+                    ),
                 }).SingleAsync();
+
+            var data = new LocationDetails
+            {
+                Nights = nights.Nights,
+                Name = locationData.Name,
+                Neighborhood = locationData.Neighborhood,
+                Price = locationData.Price,
+            };
+            return data;
         }
 
         public async Task<string> GetLocationFilterPrice(double priceFilter)
         {
-            var locationsList = await _context.Listings.Where(x => 
+            var locationsList = await _context.Listings.Where(x =>
                     Convert.ToInt32(
                         x.Price.Replace("$", "")
                             .Replace(",", "")
                             .Replace(".00", "")
-                        ) < priceFilter)
+                    ) < priceFilter)
                 .Select(location => new Locations
                 {
                     Id = location.Id,
@@ -70,7 +91,7 @@ namespace InsideAirBnb.Repositories
 
         public async Task<string> GetLocationFilterNeighbourhood(string neighbourhoodFilter)
         {
-            var locationsList = await _context.Listings.Where(x =>  x.Neighbourhood == neighbourhoodFilter)
+            var locationsList = await _context.Listings.Where(x => x.Neighbourhood == neighbourhoodFilter)
                 .Select(location => new Locations
                 {
                     Id = location.Id,
@@ -83,7 +104,7 @@ namespace InsideAirBnb.Repositories
 
         public async Task<string> GetLocationFilterReview(int reviewFilter)
         {
-            var locationsList = await _context.Listings.Where(x =>  x.ReviewScoresValue == reviewFilter)
+            var locationsList = await _context.Listings.Where(x => x.ReviewScoresValue == reviewFilter)
                 .Select(location => new Locations
                 {
                     Id = location.Id,
