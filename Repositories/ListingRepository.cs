@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
+using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
 using Newtonsoft.Json;
 
 namespace InsideAirBnb.Repositories
@@ -40,12 +41,12 @@ namespace InsideAirBnb.Repositories
 
         public async Task<LocationDetails> GetLocationDetail(int id)
         {
-            var nights = await _context.Calendars
+            var nightsData = await _context.Calendars
                 .Where(i => i.ListingId == id)
                 .GroupBy(x => x.ListingId)
                 .Select(s => new LocationDetails
                 {
-                    Nights = s.Count()
+                    Nights = s.Count(),
                 }).SingleAsync();
 
             var locationData = await _context.Listings
@@ -63,10 +64,10 @@ namespace InsideAirBnb.Repositories
 
             var data = new LocationDetails
             {
-                Nights = nights.Nights,
+                Nights = nightsData.Nights,
                 Name = locationData.Name,
                 Neighborhood = locationData.Neighborhood,
-                Price = locationData.Price,
+                Price = locationData.Price
             };
             return data;
         }

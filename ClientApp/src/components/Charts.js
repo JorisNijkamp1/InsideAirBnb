@@ -39,8 +39,8 @@ const ChartsComponent = (props) => {
     const [averageReviewScore, setAverageReviewScore] = useState([]);
     const [userStatus, setUserstatus] = useState(false);
 
-    const API_URL = "https://localhost:6001";
-    // const API_URL = "https://school-projecten.azurewebsites.net";
+    // const API_URL = "https://localhost:6001";
+     const API_URL = "https://school-projecten.azurewebsites.net";
 
     useEffect(() => {
         fetch(`${API_URL}/api/chart/housetypes`, {

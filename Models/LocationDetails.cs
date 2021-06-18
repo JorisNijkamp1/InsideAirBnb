@@ -1,4 +1,6 @@
-﻿namespace InsideAirBnb
+﻿using System.Collections.Generic;
+
+namespace InsideAirBnb
 {
     public class LocationDetails
     {

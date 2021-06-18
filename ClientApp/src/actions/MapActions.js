@@ -1,7 +1,7 @@
 ﻿import {getToken} from "../AzureADConfig";
 
-const API_URL = "https://localhost:6001";
-// const API_URL = "https://school-projecten.azurewebsites.net";
+//const API_URL = "https://localhost:6001";
+ const API_URL = "https://school-projecten.azurewebsites.net";
 
 export function GetLocationsAction(){
     return async (dispatch) => {
@@ -40,7 +40,7 @@ export function GetLocationDetailAction(id){
                 }
             })
             .then((res) => {
-                console.log(res);
+
                 return res.json();
             })
             .then((res) => {
